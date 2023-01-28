@@ -1,14 +1,14 @@
 {
 	"info": {
-		"_postman_id": "82cefed2-754e-4fde-8573-649efb2bb5d3",
-		"name": "Users API v1 Collection",
+		"_postman_id": "59e22004-c20f-4b3c-bc1f-8460925d67a3",
+		"name": "Users API v2 Collection",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_uid": "5425169-82cefed2-754e-4fde-8573-649efb2bb5d3"
+		"_uid": "5425169-59e22004-c20f-4b3c-bc1f-8460925d67a3"
 	},
 	"item": [
 		{
-			"name": "User by name",
-			"id": "4be2a1b8-393b-4b47-a1de-b0196ac7eab0",
+			"name": "/users",
+			"id": "5839fffa-b9e4-4b86-9919-1947b4ce6e34",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -16,7 +16,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{baseUrl}}/users?name=John",
+					"raw": "{{baseUrl}}/users?name=John&id",
 					"host": [
 						"{{baseUrl}}"
 					],
@@ -27,6 +27,10 @@
 						{
 							"key": "name",
 							"value": "John"
+						},
+						{
+							"key": "id",
+							"value": 1
 						}
 					]
 				},
@@ -34,13 +38,13 @@
 			},
 			"response": [
 				{
-					"id": "13a829e9-cea0-43ac-a391-ac5af1bcb8e9",
+					"id": "0cdb8ae4-8cda-4ea4-8418-b49874adbab8",
 					"name": "200",
 					"originalRequest": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/users?name=John",
+							"raw": "{{baseUrl}}/users?name=John&id",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -51,6 +55,10 @@
 								{
 									"key": "name",
 									"value": "John"
+								},
+								{
+									"key": "id",
+									"value": 1
 								}
 							]
 						},
@@ -66,36 +74,9 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n  \"id\": 1,\n  \"name\": \"John\"\n}"
+					"body": "{\n  \"data\": [\n    {\n      \"id\": 1,\n      \"name\": \"John Doe\"\n    },\n    {\n      \"id\": 2,\n      \"name\": \"Lorem Ipsum\"\n    }\n  ]\n}"
 				}
 			]
-		},
-		{
-			"name": "User by ID",
-			"id": "a5c2d95c-770b-4630-b5d9-9ad9bce2c627",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{baseUrl}}/users?id=John",
-					"host": [
-						"{{baseUrl}}"
-					],
-					"path": [
-						"users"
-					],
-					"query": [
-						{
-							"key": "id",
-							"value": "John"
-						}
-					]
-				}
-			},
-			"response": []
 		}
 	],
 	"variable": [
