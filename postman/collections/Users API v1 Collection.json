@@ -7,7 +7,7 @@
 	},
 	"item": [
 		{
-			"name": "/users",
+			"name": "User by name",
 			"id": "4be2a1b8-393b-4b47-a1de-b0196ac7eab0",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
@@ -69,6 +69,33 @@
 					"body": "{\n  \"id\": 1,\n  \"name\": \"John\"\n}"
 				}
 			]
+		},
+		{
+			"name": "User by ID",
+			"id": "a5c2d95c-770b-4630-b5d9-9ad9bce2c627",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/users?id=John",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "John"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"variable": [
