@@ -9,293 +9,17 @@ servers:
   - description: localhost
     url: http://localhost:8080
 
-paths:
-  /users:
-    summary: User collection API
-    description: API for create user
-    post:
-      summary: Create user
-      description: Create a new user
-      operationId: createUser
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/User"
-      responses:
-        "201":
-          description: Created
-    get:
-      summary: Search users
-      description: Search users by given criteria
-      operationId: searchUsers
-      parameters:
-        - name: group
-          in: query
-          required: false
-          schema:
-            type: string
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UserRecords"
-              examples:
-                FOUND: 
-                  summary: Found users
-                  value:
-                    status: success
-                    description: "xxx users found"
-                    data:
-                      - id: 1
-                        name: "User1"
-                        roles: []
-                      - id: 2
-                        name: "User 2"
-                        roles: []
-                NOUSER: 
-                  summary: No user found in group
-                  value:
-                    status: success
-                    description: "Group is empty"
-                    data: []
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResult"
-              examples:
-                NOQUERY:
-                  summary: No query parameters
-                  value:
-                    status: fail
-                    description: "Error"
-                    errors:
-                      - code: 3
-                        name: "ERROR_0003_NO_QUERY_PARAMS"
-                        description: "No query parameter specified"
-                        value: ""
-                NOGROUP:
-                  summary: Group not exist
-                  value:
-                    status: fail
-                    description: "Error"
-                    errors:
-                      - code: 2
-                        name: "ERROR_0002_GROUP_NOTFOUND"
-                        description: "Group not found"
-                        value: "Group1"
-
-  /users/{id}:
-    summary: Individual user API
-    description: An API for interacting with an indicidual user & roles
-    get:
-      summary: Get single user
-      description: Get user object by ID
-      operationId: getSingleUser
-      parameters:
-        - name: id
-          in: path
-          style: simple
-          required: true
-          description: User ID
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/SingleUserRecord"
-        "400":
-          description: Bad request
-        "404":
-          description: Not found
-    
-  /users/{id}/roles:
-    summary: User role API
-    description: API for managing user roles
-    put:
-      summary: Update user roles
-      description: |
-        Add, update, remove user roles, update roles to [] 
-        will remove all roles
-      operationId: updateUserRoles
-      parameters:
-        - name: id
-          in: path
-          style: simple
-          required: true
-          description: User ID
-          schema:
-            type: integer
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: "#/components/schemas/Role"
-      responses:
-        "202":
-          description: |
-            User's roles updated successfully
-            
-            *NOTE* roles inherited from assigned group will not be impacted
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResult"
-              examples:
-                NOROLE:
-                  summary: Some role not exist
-                  value:
-                    status: fail
-                    description: "Error"
-                    errors:
-                      - code: 1
-                        name: "ERROR_0001_ROLE_NOTFOUND"
-                        description: "Role not found"
-                        value: "Role1"
-        "404":
-          description: User not found
-
-  /groups:
-    summary: Group API
-    description: API for manging group and query/update users in group
-    get:
-      summary: Get groups
-      description: List all available groups
-      operationId: getGroups
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GroupRecords"
-                
-  /groups/{id}/users:
-    summary: Manage Group Users API
-    description: API for managing users in group
-    get:
-      summary: Get group users
-      description: List all available groups
-      operationId: getGroupUsers
-      parameters:
-        - name: id
-          in: path
-          style: simple
-          required: true
-          description: Group ID
-          schema:
-            type: string
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UserRecords"
-    post:
-      summary: Add group users
-      description: Add users into group
-      operationId: addGroupUsers
-      parameters:
-        - name: id
-          in: path
-          style: simple
-          required: true
-          description: Group ID
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              description: List of user ids to be added
-              properties:
-                data:
-                  type: array
-                  items:
-                    type: integer
-              example: [1, 2, 3]
-      responses:
-        "204":
-          description: Success
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResult"
-              examples:
-                NOUSER:
-                  summary: Role not exist
-                  value:
-                    status: fail
-                    description: "Error"
-                    errors:
-                      - code: 3
-                        name: "ERROR_0003_USER_NOTFOUND"
-                        description: "User not found"
-                        value: "User1"
-        "404":
-          description: Group not found
-
-    delete:
-      summary: Delete group users
-      description: Delete users from group
-      operationId: deleteGroupUsers
-      parameters:
-        - name: id
-          in: path
-          style: simple
-          required: true
-          description: Group ID
-          schema:
-            type: string
-        - name: users
-          in: query
-          required: true
-          description: List of user IDs to be removed from group
-          schema:
-            type: array
-            items:
-              type: integer
-            example: [1, 2, 3]
-      responses:
-        "204":
-          description: Success
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResult"
-              examples:
-                NOUSER:
-                  summary: Role not exist
-                  value:
-                    status: fail
-                    description: "Error"
-                    errors:
-                      - code: 3
-                        name: "ERROR_0003_USER_NOTFOUND"
-                        description: "User not found"
-                        value: "User1"
-        "404":
-          description: Group not found
-          
-  
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    APIKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      
   schemas:
     ErrorResult:
       required:
@@ -344,13 +68,14 @@ components:
         name:
           type: string
           description: Role name
-          example: read
+          example: getGroup
       example:
-        name: read
+        name: getGroup
     User:
       required:
         - id
         - name
+        - version
         - roles
       type: object
       description: User object
@@ -363,6 +88,16 @@ components:
           type: string
           description: User logon
           example: User1
+        password:
+          type: string
+          description: User password
+        version:
+          type: integer
+          description: |
+            Version of user data
+            
+            *NOTE* When creating user version is always 1
+          example: 1
         roles:
           type: array
           items:
@@ -371,6 +106,7 @@ components:
       example:
         id: 1
         name: "User1"
+        version: 1
         roles: []
     SingleUserRecord:
       required:
@@ -449,4 +185,516 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Group"
+    Link:
+      type: object
+      description: JSON object to provide link
+      properties:
+        for:
+          type: string
+          description: Purpose of the link
+          example: userPasswordLink
+        link:
+          type: string
+          description: url
+          example: https://localhost:8080/userPasswordLink?id=1
+        create:
+          type: integer
+          description: Create time in epoch
+          example: 1675117999891
+        expiry:
+          type: integer
+          description: Expiry time
+          example: 1675118999891
+    Links:
+      type: object
+      description: Array of link
+      properties:
+        data:
+          type: array
+          description: Links
+          items:
+            $ref: "#/components/schemas/Link"
           
+    Errors:
+      example:
+        NOUSER: &refErrNoUser
+          summary: User not found
+          value:
+            status: fail
+            description: "Error"
+            errors:
+              - code: 1
+                name: "ERROR_0001_NOUSER"
+                description: "User not found"
+                value: "User1"
+        NOROLE: &refErrNoRole
+          summary: Role not found
+          value:
+            status: fail
+            description: "Error"
+            errors:
+              - code: 2
+                name: "ERROR_0002_NOROLE"
+                description: "Role not found"
+                value: "Role1"
+        NOGROUP: &refErrNoGroup
+          summary: Group not found
+          value:
+            status: fail
+            description: "Error"
+            errors:
+              - code: 3
+                name: "ERROR_0003_NOGROUP"
+                description: "Group not found"
+                value: "Group1"
+        MISSINGFIELD: &refErrMissingField
+          summary: Missing field
+          value:
+            status: fail
+            description: "Error"
+            errors:
+              - code: 4
+                name: "ERROR_0004_MISSINGFIELD"
+                description: "Missing field"
+                value: "password"
+        NOFIELD: &refErrNoField
+          summary: Field not found
+          value:
+            status: fail
+            description: "Error"
+            errors:
+              - code: 5
+                name: "ERROR_0004_NOFIELD"
+                description: "Field not found"
+                value: "password"
+        MISSINGQUERY: &refErrMissingQuery
+          summary: Missing query parameters
+          value:
+            status: fail
+            description: "Error"
+            errors:
+              - code: 6
+                name: "ERROR_0006_MISSINGQUERY"
+                description: "Missing query parameters"
+                value: ""
+        INVALIDBODY: &refErrInvalidBody
+          summary: Invalid request body
+          value:
+            status: fail
+            description: "Error"
+            errors:
+              - code: 7
+                name: "ERROR_0007_INVALIDBODY"
+                description: "Invalid request body"
+                value: ""
+        INVALIDDATA: &refErrInvalidData
+          summary: Invalid data or data version
+          value:
+            status: fail
+            description: "Error"
+            errors:
+              - code: 8
+                name: "ERROR_0008_INVALIDDATA"
+                description: "Invalid data or data version"
+                value: ""
+
+paths:
+  /users:
+    summary: User collection API
+    description: API for create user
+    post:
+      summary: Create user
+      description: Create a new user
+      operationId: createUser
+      security: 
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+            example:
+              id: 1
+              name: "User1"
+              password: 1234
+              version: 1
+              roles: []
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResult"
+              examples:
+                ERR1: *refErrInvalidBody
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+    get:
+      summary: Search users
+      description: Search users by given criteria
+      operationId: searchUsers
+      security: 
+        - bearerAuth: []
+      parameters:
+        - name: group
+          in: query
+          required: false
+          description: Group ID
+          example: Group1
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserRecords"
+              examples:
+                FOUND: 
+                  summary: Found users
+                  value:
+                    status: success
+                    description: "xxx users found"
+                    data:
+                      - id: 1
+                        name: "User1"
+                        roles: []
+                      - id: 2
+                        name: "User 2"
+                        roles: []
+                NOUSER: 
+                  summary: No user found in group
+                  value:
+                    status: success
+                    description: "Group is empty"
+                    data: []
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResult"
+              examples:
+                ERR1: *refErrMissingQuery
+                ERR2: *refErrNoGroup
+
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+  /users/{id}:
+    summary: Individual user API
+    description: An API for interacting with an indicidual user & roles
+    get:
+      summary: Get single user
+      description: Get user object by ID
+      operationId: getSingleUser
+      security: 
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          style: simple
+          required: true
+          description: User ID
+          example: 1
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SingleUserRecord"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: User not found
+    patch:
+      summary: Change user password
+      description: |
+        Change user password
+        
+        **NOTE** In this API, password is mandatory
+      operationId: patchUser
+      security: 
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          style: simple
+          required: true
+          description: User ID
+          example: 1
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+            example:
+              id: 1
+              name: User1
+              password: 1234
+              version: 2
+              roles: []
+      responses:
+        "204":
+          description: Success
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResult"
+              examples:
+                ERR1: *refErrInvalidBody
+                ERR2: *refErrInvalidData
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: User not found
+          
+  /users/{id}/password:
+    summary: User password API
+    description: Request change password link, change password
+    get:
+      summary: Get change password link
+      description: Get change password link for forget-password process
+      operationId: getUserPasswordLink
+      security: 
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          style: simple
+          required: true
+          description: User ID
+          example: 1
+          schema: 
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Links"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: User not found
+
+  /users/{id}/roles:
+    summary: User role API
+    description: API for managing user roles
+    put:
+      summary: Update user roles
+      description: |
+        Add, update, remove user roles, update roles to [] 
+        will remove all roles
+      operationId: updateUserRoles
+      security: 
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          style: simple
+          required: true
+          description: User ID
+          example: 1
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/Role"
+            example:
+              - name: updateUserRoles
+              - name: getSingleUser
+      responses:
+        "202":
+          description: |
+            User's roles updated successfully
+            
+            *NOTE* roles inherited from assigned group will not be impacted
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResult"
+              examples:
+                ERR1: *refErrNoRole
+                ERR2: *refErrInvalidBody
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: User not found
+
+  /groups:
+    summary: Group API
+    description: API for manging group and query/update users in group
+    get:
+      summary: Get groups
+      description: List all available groups
+      operationId: getGroups
+      security: 
+        - bearerAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupRecords"
+                
+  /groups/{id}/users:
+    summary: Manage Group Users API
+    description: API for managing users in group
+    get:
+      summary: Get group users
+      description: List all available groups
+      operationId: getGroupUsers
+      security: 
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          style: simple
+          required: true
+          description: Group ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserRecords"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+    post:
+      summary: Add group users
+      description: Add users into group
+      operationId: addGroupUsers
+      security: 
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          style: simple
+          required: true
+          description: Group ID
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              description: List of user ids to be added
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: integer
+              example: [1, 2, 3]
+      responses:
+        "204":
+          description: Success
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResult"
+              examples:
+                NOUSER:
+                  summary: Role not exist
+                  value:
+                    status: fail
+                    description: "Error"
+                    errors:
+                      - code: 3
+                        name: "ERROR_0003_USER_NOTFOUND"
+                        description: "User not found"
+                        value: "User1"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Group not found
+
+    delete:
+      summary: Delete group users
+      description: Delete users from group
+      operationId: deleteGroupUsers
+      security: 
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          style: simple
+          required: true
+          description: Group ID
+          schema:
+            type: string
+        - name: users
+          in: query
+          required: true
+          description: List of user IDs to be removed from group
+          schema:
+            type: array
+            items:
+              type: integer
+            example: [1, 2, 3]
+      responses:
+        "204":
+          description: Success
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResult"
+              examples:
+                NOUSER:
+                  summary: Role not exist
+                  value:
+                    status: fail
+                    description: "Error"
+                    errors:
+                      - code: 3
+                        name: "ERROR_0003_USER_NOTFOUND"
+                        description: "User not found"
+                        value: "User1"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Group not found
