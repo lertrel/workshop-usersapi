@@ -5,14 +5,14 @@ id = ae982920-e9d3-4bd7-b21f-002963d5e5cb
 
 [relations.collections]
 rootDirectory = postman/collections
-files[] = {"id":"5425169-59e22004-c20f-4b3c-bc1f-8460925d67a3","path":"Users API v2 Collection.json","metaData":{}}
+files[] = {"id":"5425169-091b3370-ca9c-4716-8554-3dea2edc51e5","path":"User API v3 Collection.json","metaData":{}}
 
 [relations.collections.metaData]
 
 [relations.apiDefinition]
 rootDirectory = postman/schemas
-files[] = {"path":"index.raml","metaData":{}}
+files[] = {"path":"index.yaml","metaData":{}}
 
 [relations.apiDefinition.metaData]
-type = raml:1
-rootFiles[] = index.raml
+rootFiles[] = index.yaml
+type = openapi:3

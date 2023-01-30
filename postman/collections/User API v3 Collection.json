@@ -1,0 +1,1076 @@
+{
+	"info": {
+		"_postman_id": "091b3370-ca9c-4716-8554-3dea2edc51e5",
+		"name": "User API v3 Collection",
+		"description": "APIs for ticket management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_uid": "5425169-091b3370-ca9c-4716-8554-3dea2edc51e5"
+	},
+	"item": [
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "{id}",
+					"item": [
+						{
+							"name": "Get single user",
+							"id": "48f29235-d3a6-49a1-8111-fa3cc902dd65",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/users/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "-16471216",
+											"description": "(Required) User ID"
+										}
+									]
+								},
+								"description": "Get user object by ID"
+							},
+							"response": [
+								{
+									"id": "8d861c30-64f5-47ba-9acf-28fdb7a7bcdc",
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/users/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"users",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "-16471216",
+													"description": "(Required) User ID"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"status\": \"success\",\n  \"description\": \"1 user found\",\n  \"data\": [\n    {\n      \"id\": 1,\n      \"name\": \"User1\",\n      \"roles\": [\n        {\n          \"name\": \"read\"\n        },\n        {\n          \"name\": \"read\"\n        }\n      ]\n    },\n    {\n      \"id\": 1,\n      \"name\": \"User1\",\n      \"roles\": [\n        {\n          \"name\": \"read\"\n        },\n        {\n          \"name\": \"read\"\n        }\n      ]\n    }\n  ]\n}"
+								},
+								{
+									"id": "394a34b6-ecfb-4259-a61b-7968fc57d2ab",
+									"name": "Bad request",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/users/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"users",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "-16471216",
+													"description": "(Required) User ID"
+												}
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"id": "4e778a28-02a6-4d76-8d74-b5c19feeffb0",
+									"name": "Not found",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/users/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"users",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "-16471216",
+													"description": "(Required) User ID"
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "Update user roles",
+							"id": "5383ad1d-e3a1-442b-b9de-972cebfff3aa",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n  {\n    \"name\": \"read\"\n  },\n  {\n    \"name\": \"read\"\n  }\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users/:id/roles",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										":id",
+										"roles"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "-16471216",
+											"description": "(Required) User ID"
+										}
+									]
+								},
+								"description": "Add, update, remove user roles, update roles to [] \nwill remove all roles\n"
+							},
+							"response": [
+								{
+									"id": "db2c77e5-ae56-4bff-8aeb-81f631258a16",
+									"name": "User's roles updated successfully\n\n*NOTE* roles inherited from assigned group will not be impacted\n",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "[\n  {\n    \"name\": \"read\"\n  },\n  {\n    \"name\": \"read\"\n  }\n]",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/users/:id/roles",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"users",
+												":id",
+												"roles"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "-16471216",
+													"description": "(Required) User ID"
+												}
+											]
+										}
+									},
+									"status": "Accepted",
+									"code": 202,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"id": "29dc2172-51cf-42a2-aea2-3da17c754d3a",
+									"name": "Bad request",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "[\n  {\n    \"name\": \"read\"\n  },\n  {\n    \"name\": \"read\"\n  }\n]",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/users/:id/roles",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"users",
+												":id",
+												"roles"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "-16471216",
+													"description": "(Required) User ID"
+												}
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"status\": \"fail\",\n  \"description\": \"Error\",\n  \"errors\": [\n    {\n      \"code\": 1,\n      \"name\": \"ERROR_0001_ROLE_NOTFOUND\",\n      \"description\": \"Role not found\",\n      \"value\": \"Role1\"\n    }\n  ]\n}"
+								},
+								{
+									"id": "51d84b3e-e09d-41ce-b502-95e409b8ca68",
+									"name": "User not found",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "[\n  {\n    \"name\": \"read\"\n  },\n  {\n    \"name\": \"read\"\n  }\n]",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/users/:id/roles",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"users",
+												":id",
+												"roles"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "-16471216",
+													"description": "(Required) User ID"
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						}
+					],
+					"id": "0c8be3b3-6055-4163-a343-9a7f5121d1d6"
+				},
+				{
+					"name": "Create user",
+					"id": "aa59bb12-560b-41f2-a3d8-2af1586fc7b5",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": 1,\n  \"name\": \"User1\",\n  \"roles\": []\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users"
+							]
+						},
+						"description": "Create a new user"
+					},
+					"response": [
+						{
+							"id": "8e1d0f51-59fc-4229-b02b-c43e51ab4108",
+							"name": "Created",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"id\": 1,\n  \"name\": \"User1\",\n  \"roles\": [\n    {\n      \"name\": \"read\"\n    },\n    {\n      \"name\": \"read\"\n    }\n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Search users",
+					"id": "40ebcbab-bfa4-4978-9e9e-c922e9bb6ce4",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/users?group=aute",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "group",
+									"value": "aute"
+								}
+							]
+						},
+						"description": "Search users by given criteria"
+					},
+					"response": [
+						{
+							"id": "2c553670-f706-45d5-97ec-ef46e7255f25",
+							"name": "OK",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/users?group=aute",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users"
+									],
+									"query": [
+										{
+											"key": "group",
+											"value": "aute"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"status\": \"success\",\n  \"description\": \"xxx users found\",\n  \"data\": [\n    {\n      \"id\": 1,\n      \"name\": \"User1\",\n      \"roles\": []\n    },\n    {\n      \"id\": 2,\n      \"name\": \"User 2\",\n      \"roles\": []\n    }\n  ]\n}"
+						},
+						{
+							"id": "36c6ea05-6828-429b-bed6-f834ab465ee0",
+							"name": "Bad Request",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/users?group=aute",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users"
+									],
+									"query": [
+										{
+											"key": "group",
+											"value": "aute"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"status\": \"fail\",\n  \"description\": \"Error\",\n  \"errors\": [\n    {\n      \"code\": 3,\n      \"name\": \"ERROR_0003_NO_QUERY_PARAMS\",\n      \"description\": \"No query parameter specified\",\n      \"value\": \"\"\n    }\n  ]\n}"
+						}
+					]
+				}
+			],
+			"id": "c3e9c6d1-2230-40b9-b7be-d84843080bf3"
+		},
+		{
+			"name": "groups",
+			"item": [
+				{
+					"name": "{id}/users",
+					"item": [
+						{
+							"name": "Get group users",
+							"id": "0d195939-ae2f-4f33-b44c-35214991de1c",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/groups/:id/users",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"groups",
+										":id",
+										"users"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "aute",
+											"description": "(Required) Group ID"
+										}
+									]
+								},
+								"description": "List all available groups"
+							},
+							"response": [
+								{
+									"id": "c230f31e-3f65-4ab4-86ec-8996d9948b90",
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/groups/:id/users",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"groups",
+												":id",
+												"users"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "aute",
+													"description": "(Required) Group ID"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"status\": \"success\",\n  \"description\": \"xxx users found\",\n  \"data\": [\n    {\n      \"id\": 1,\n      \"name\": \"User1\",\n      \"roles\": [\n        {\n          \"name\": \"read\"\n        },\n        {\n          \"name\": \"read\"\n        }\n      ]\n    },\n    {\n      \"id\": 1,\n      \"name\": \"User1\",\n      \"roles\": [\n        {\n          \"name\": \"read\"\n        },\n        {\n          \"name\": \"read\"\n        }\n      ]\n    }\n  ]\n}"
+								}
+							]
+						},
+						{
+							"name": "Add group users",
+							"id": "4075ffb9-b84f-49ca-997c-30da13bcde8b",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"data\": [\n    22926699,\n    -77079020\n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/groups/:id/users",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"groups",
+										":id",
+										"users"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "aute",
+											"description": "(Required) Group ID"
+										}
+									]
+								},
+								"description": "Add users into group"
+							},
+							"response": [
+								{
+									"id": "eb1fc091-d85f-4141-bbb5-3fef35ef55f5",
+									"name": "Success",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"data\": [\n    71373239,\n    49242903\n  ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/groups/:id/users",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"groups",
+												":id",
+												"users"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "aute",
+													"description": "(Required) Group ID"
+												}
+											]
+										}
+									},
+									"status": "No Content",
+									"code": 204,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"id": "34a1fa6c-e7bf-42d2-b9d9-5fe06bd79411",
+									"name": "Bad request",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"data\": [\n    71373239,\n    49242903\n  ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/groups/:id/users",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"groups",
+												":id",
+												"users"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "aute",
+													"description": "(Required) Group ID"
+												}
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"status\": \"fail\",\n  \"description\": \"Error\",\n  \"errors\": [\n    {\n      \"code\": 3,\n      \"name\": \"ERROR_0003_USER_NOTFOUND\",\n      \"description\": \"User not found\",\n      \"value\": \"User1\"\n    }\n  ]\n}"
+								},
+								{
+									"id": "82250369-8050-4318-804e-7632fabbb667",
+									"name": "Group not found",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"data\": [\n    71373239,\n    49242903\n  ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/groups/:id/users",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"groups",
+												":id",
+												"users"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "aute",
+													"description": "(Required) Group ID"
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "Delete group users",
+							"id": "614bc5eb-cf3b-41b7-ac5a-0b2169d16d19",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/groups/:id/users?users=1&users=2&users=3",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"groups",
+										":id",
+										"users"
+									],
+									"query": [
+										{
+											"key": "users",
+											"value": "1",
+											"description": "(Required) List of user IDs to be removed from group"
+										},
+										{
+											"key": "users",
+											"value": "2",
+											"description": "(Required) List of user IDs to be removed from group"
+										},
+										{
+											"key": "users",
+											"value": "3",
+											"description": "(Required) List of user IDs to be removed from group"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "aute",
+											"description": "(Required) Group ID"
+										}
+									]
+								},
+								"description": "Delete users from group"
+							},
+							"response": [
+								{
+									"id": "2a47a1a8-98e6-44bb-b20a-868e13b09a7f",
+									"name": "Success",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/groups/:id/users?users=1&users=2&users=3",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"groups",
+												":id",
+												"users"
+											],
+											"query": [
+												{
+													"key": "users",
+													"value": "1"
+												},
+												{
+													"key": "users",
+													"value": "2"
+												},
+												{
+													"key": "users",
+													"value": "3"
+												}
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "aute",
+													"description": "(Required) Group ID"
+												}
+											]
+										}
+									},
+									"status": "No Content",
+									"code": 204,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"id": "1a33f9d8-d279-43be-a7ee-963eafac7c80",
+									"name": "Bad request",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/groups/:id/users?users=1&users=2&users=3",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"groups",
+												":id",
+												"users"
+											],
+											"query": [
+												{
+													"key": "users",
+													"value": "1"
+												},
+												{
+													"key": "users",
+													"value": "2"
+												},
+												{
+													"key": "users",
+													"value": "3"
+												}
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "aute",
+													"description": "(Required) Group ID"
+												}
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"status\": \"fail\",\n  \"description\": \"Error\",\n  \"errors\": [\n    {\n      \"code\": 3,\n      \"name\": \"ERROR_0003_USER_NOTFOUND\",\n      \"description\": \"User not found\",\n      \"value\": \"User1\"\n    }\n  ]\n}"
+								},
+								{
+									"id": "5fbb248a-3c6d-4816-a5bb-5223b6f0d46a",
+									"name": "Group not found",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/groups/:id/users?users=1&users=2&users=3",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"groups",
+												":id",
+												"users"
+											],
+											"query": [
+												{
+													"key": "users",
+													"value": "1"
+												},
+												{
+													"key": "users",
+													"value": "2"
+												},
+												{
+													"key": "users",
+													"value": "3"
+												}
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "aute",
+													"description": "(Required) Group ID"
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						}
+					],
+					"id": "42188c1f-4ba0-4dcd-9262-6cf1b8bf8561"
+				},
+				{
+					"name": "Get groups",
+					"id": "ad95dc14-3483-4df2-907a-3931a8d21171",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/groups",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"groups"
+							]
+						},
+						"description": "List all available groups"
+					},
+					"response": [
+						{
+							"id": "b80bb818-e5b0-4284-b2ab-eacd32fee5df",
+							"name": "OK",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/groups",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"groups"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"status\": \"success\",\n  \"description\": \"xxx group found\",\n  \"data\": [\n    {\n      \"id\": 1,\n      \"name\": \"Group1\"\n    },\n    {\n      \"id\": 1,\n      \"name\": \"Group1\"\n    }\n  ]\n}"
+						}
+					]
+				}
+			],
+			"id": "d3774829-c23f-4ad3-9f0a-ffae193b85ac"
+		}
+	],
+	"variable": [
+		{
+			"id": "8265de5a-ae29-4e97-86c1-874a4dc9ba15",
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+}

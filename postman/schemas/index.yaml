@@ -1,0 +1,452 @@
+openapi: 3.0.3
+
+info:
+  title: User API
+  description: APIs for ticket management
+  version: v1
+
+servers:
+  - description: localhost
+    url: http://localhost:8080
+
+paths:
+  /users:
+    summary: User collection API
+    description: API for create user
+    post:
+      summary: Create user
+      description: Create a new user
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "201":
+          description: Created
+    get:
+      summary: Search users
+      description: Search users by given criteria
+      operationId: searchUsers
+      parameters:
+        - name: group
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserRecords"
+              examples:
+                FOUND: 
+                  summary: Found users
+                  value:
+                    status: success
+                    description: "xxx users found"
+                    data:
+                      - id: 1
+                        name: "User1"
+                        roles: []
+                      - id: 2
+                        name: "User 2"
+                        roles: []
+                NOUSER: 
+                  summary: No user found in group
+                  value:
+                    status: success
+                    description: "Group is empty"
+                    data: []
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResult"
+              examples:
+                NOQUERY:
+                  summary: No query parameters
+                  value:
+                    status: fail
+                    description: "Error"
+                    errors:
+                      - code: 3
+                        name: "ERROR_0003_NO_QUERY_PARAMS"
+                        description: "No query parameter specified"
+                        value: ""
+                NOGROUP:
+                  summary: Group not exist
+                  value:
+                    status: fail
+                    description: "Error"
+                    errors:
+                      - code: 2
+                        name: "ERROR_0002_GROUP_NOTFOUND"
+                        description: "Group not found"
+                        value: "Group1"
+
+  /users/{id}:
+    summary: Individual user API
+    description: An API for interacting with an indicidual user & roles
+    get:
+      summary: Get single user
+      description: Get user object by ID
+      operationId: getSingleUser
+      parameters:
+        - name: id
+          in: path
+          style: simple
+          required: true
+          description: User ID
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SingleUserRecord"
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+    
+  /users/{id}/roles:
+    summary: User role API
+    description: API for managing user roles
+    put:
+      summary: Update user roles
+      description: |
+        Add, update, remove user roles, update roles to [] 
+        will remove all roles
+      operationId: updateUserRoles
+      parameters:
+        - name: id
+          in: path
+          style: simple
+          required: true
+          description: User ID
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/Role"
+      responses:
+        "202":
+          description: |
+            User's roles updated successfully
+            
+            *NOTE* roles inherited from assigned group will not be impacted
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResult"
+              examples:
+                NOROLE:
+                  summary: Some role not exist
+                  value:
+                    status: fail
+                    description: "Error"
+                    errors:
+                      - code: 1
+                        name: "ERROR_0001_ROLE_NOTFOUND"
+                        description: "Role not found"
+                        value: "Role1"
+        "404":
+          description: User not found
+
+  /groups:
+    summary: Group API
+    description: API for manging group and query/update users in group
+    get:
+      summary: Get groups
+      description: List all available groups
+      operationId: getGroups
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupRecords"
+                
+  /groups/{id}/users:
+    summary: Manage Group Users API
+    description: API for managing users in group
+    get:
+      summary: Get group users
+      description: List all available groups
+      operationId: getGroupUsers
+      parameters:
+        - name: id
+          in: path
+          style: simple
+          required: true
+          description: Group ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserRecords"
+    post:
+      summary: Add group users
+      description: Add users into group
+      operationId: addGroupUsers
+      parameters:
+        - name: id
+          in: path
+          style: simple
+          required: true
+          description: Group ID
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              description: List of user ids to be added
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: integer
+              example: [1, 2, 3]
+      responses:
+        "204":
+          description: Success
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResult"
+              examples:
+                NOUSER:
+                  summary: Role not exist
+                  value:
+                    status: fail
+                    description: "Error"
+                    errors:
+                      - code: 3
+                        name: "ERROR_0003_USER_NOTFOUND"
+                        description: "User not found"
+                        value: "User1"
+        "404":
+          description: Group not found
+
+    delete:
+      summary: Delete group users
+      description: Delete users from group
+      operationId: deleteGroupUsers
+      parameters:
+        - name: id
+          in: path
+          style: simple
+          required: true
+          description: Group ID
+          schema:
+            type: string
+        - name: users
+          in: query
+          required: true
+          description: List of user IDs to be removed from group
+          schema:
+            type: array
+            items:
+              type: integer
+            example: [1, 2, 3]
+      responses:
+        "204":
+          description: Success
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResult"
+              examples:
+                NOUSER:
+                  summary: Role not exist
+                  value:
+                    status: fail
+                    description: "Error"
+                    errors:
+                      - code: 3
+                        name: "ERROR_0003_USER_NOTFOUND"
+                        description: "User not found"
+                        value: "User1"
+        "404":
+          description: Group not found
+          
+  
+components:
+  schemas:
+    ErrorResult:
+      required:
+        - status
+        - description
+      type: object
+      description: API result in response
+      properties:
+        status:
+          type: string
+          description: status of API request success|fail
+          example: fail
+        description:
+          type: string
+          description: Additional description for fail status
+          example: Role not found
+        errors:
+          type: array
+          description: list of errors
+          items:
+            required:
+              - code
+              - name
+              - description
+              - value
+            type: object
+            properties:
+              code: 
+                type: integer
+                example: 1
+              name:
+                type: string
+                example: "ERR_0001_ROLE_NOT_FOUND"
+              description:
+                type: string
+                example: "A given role not found"
+              value:
+                type: string
+                example: "1"
+    Role:
+      required:
+        - name
+      type: object
+      description: Role of user
+      properties:
+        name:
+          type: string
+          description: Role name
+          example: read
+      example:
+        name: read
+    User:
+      required:
+        - id
+        - name
+        - roles
+      type: object
+      description: User object
+      properties:
+        id:
+          type: integer
+          description: User unique ID
+          example: 1
+        name:
+          type: string
+          description: User logon
+          example: User1
+        roles:
+          type: array
+          items:
+            $ref: "#/components/schemas/Role"
+          description: User's roles
+      example:
+        id: 1
+        name: "User1"
+        roles: []
+    SingleUserRecord:
+      required:
+        - status
+        - description
+        - data
+      type: object
+      description: An object for containing user records
+      properties:
+        status:
+          type: string
+          description: status of API request success|fail
+          example: success
+        description:
+          type: string
+          description: Additional description for fail status
+          example: "1 user found"
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+    UserRecords:
+      type: object
+      description: An object for containing user records
+      properties:
+        status:
+          type: string
+          description: status of API request success|fail
+          example: success
+        description:
+          type: string
+          description: Additional description for fail status
+          example: "xxx users found"
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+      example:
+        status: success
+        description: "xxx users found"
+        data:
+          - id: 1
+            name: "User1"
+            roles: []
+          - id: 2
+            name: "User1"
+            roles: []
+    Group:
+      required:
+        - id
+        - name
+      type: object
+      description: User group
+      properties:
+        id:
+          type: integer
+          description: Group ID
+          example: 1
+        name:
+          type: string
+          description: Group Name
+          example: "Group1"
+    GroupRecords:
+      type: object
+      description: An object for containing user records
+      properties:
+        status:
+          type: string
+          description: status of API request success|fail
+          example: success
+        description:
+          type: string
+          description: Additional description for fail status
+          example: "xxx group found"
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Group"
+          
