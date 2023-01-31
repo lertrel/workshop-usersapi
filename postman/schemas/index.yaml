@@ -304,7 +304,10 @@ paths:
     description: API for create user
     post:
       summary: Create user
-      description: Create a new user
+      description: |
+        Create a new user
+        
+        **NOTE** In this API call, user.id will be blank
       operationId: createUser
       security: 
         - bearerAuth: []
@@ -314,7 +317,6 @@ paths:
             schema:
               $ref: "#/components/schemas/User"
             example:
-              id: 1
               name: "User1"
               password: 1234
               version: 1
@@ -322,6 +324,16 @@ paths:
       responses:
         "201":
           description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+          links:
+            UserId:
+              operationId: getSingleUser
+              parameters:
+                id: "$response.body/#id"
+              description: The created user ID will be used in /users/{id}
         "400":
           description: Bad Request
           content:
@@ -698,3 +710,5 @@ paths:
           description: Forbidden
         "404":
           description: Group not found
+          
+  
