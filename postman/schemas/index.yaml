@@ -75,6 +75,7 @@ components:
       required:
         - id
         - name
+        - email
         - version
         - roles
       type: object
@@ -88,6 +89,14 @@ components:
           type: string
           description: User logon
           example: User1
+        email:
+          type: string
+          description: User email address
+          example: test@email.com
+        mobile:
+          type: string
+          description: User mobile no
+          example: 999999999999
         password:
           type: string
           description: User password
@@ -106,6 +115,7 @@ components:
       example:
         id: 1
         name: "User1"
+        email: "test@email.com"
         version: 1
         roles: []
     SingleUserRecord:
@@ -196,7 +206,7 @@ components:
         link:
           type: string
           description: url
-          example: https://localhost:8080/userPasswordLink?id=1
+          example: https://localhost:8080/userPasswordLink?id=1&token=XXXXX
         create:
           type: integer
           description: Create time in epoch
@@ -214,8 +224,41 @@ components:
           description: Links
           items:
             $ref: "#/components/schemas/Link"
+    Token:
+      type: object
+      description: Token object
+      properties:
+        type:
+          type: string
+          description: Token type ex. refresh, access
+          example: refresh
+        format:
+          type: string
+          description: Token format ex. JWT
+          example: JWT
+        token:
+          type: string
+          description: Token string
+          example: XXXX
+        create:
+          type: integer
+          description: Create time in epoch
+          example: 1675117999891
+        expiry:
+          type: integer
+          description: Expiry time
+          example: 1675118999891
+    Tokens:
+      type: object
+      description: Array of Token
+      properties:
+        data:
+          type: array
+          description: Links
+          items:
+            $ref: "#/components/schemas/Token"
           
-    Errors:
+    Examples:
       example:
         NOUSER: &refErrNoUser
           summary: User not found
@@ -258,15 +301,15 @@ components:
                 description: "Missing field"
                 value: "password"
         NOFIELD: &refErrNoField
-          summary: Field not found
+          summary: Unknow field
           value:
             status: fail
             description: "Error"
             errors:
               - code: 5
-                name: "ERROR_0004_NOFIELD"
-                description: "Field not found"
-                value: "password"
+                name: "ERROR_0005_NOFIELD"
+                description: "Unknow field"
+                value: "color"
         MISSINGQUERY: &refErrMissingQuery
           summary: Missing query parameters
           value:
@@ -299,6 +342,71 @@ components:
                 value: ""
 
 paths:
+  /tokens:
+    summary: Token API
+    description: API for create / validate / revoke refresh token
+    post:
+      summary: Request refresh token
+      description: |
+        Request a new request token from username/password
+        
+        **NOTE** This operation will accept only name / password
+      operationId: createRefreshToken
+      security:
+        - APIKeyAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+            example:
+              name: "User1"
+              password: "1234"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tokens"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResult"
+              examples:
+                ERR1: *refErrInvalidBody
+                ERR2: *refErrNoField
+                ERR3: *refErrMissingField                
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+    get:
+      summary: Get access token
+      description: |
+        Getting a new access token from request token provided in header
+      operationId: getAccessToken
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tokens"
+              example:
+                type: access
+                format: JWT
+                token: XXX
+                created: 1675117999891
+                expiry: 1675118999891
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
   /users:
     summary: User collection API
     description: API for create user
@@ -318,6 +426,7 @@ paths:
               $ref: "#/components/schemas/User"
             example:
               name: "User1"
+              email: "test@email.com"
               password: 1234
               version: 1
               roles: []
@@ -358,6 +467,13 @@ paths:
           required: false
           description: Group ID
           example: Group1
+          schema:
+            type: string
+        - name: email
+          in: query
+          required: false
+          description: User email
+          example: test@email.com
           schema:
             type: string
       responses:
