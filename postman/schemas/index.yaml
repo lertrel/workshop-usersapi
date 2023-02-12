@@ -2,12 +2,16 @@ openapi: 3.0.3
 
 info:
   title: User API
-  description: APIs for ticket management
+  description: APIs for users management
   version: v1
 
 servers:
   - description: localhost
-    url: http://localhost:8080
+    url: http://localhost:8080/user-api/{version}
+    variables:
+      version:
+        default: v1
+        description: API version
 
 components:
   securitySchemes:
@@ -32,6 +36,9 @@ components:
           type: string
           description: status of API request success|fail
           example: fail
+          enum:
+            - success
+            - fail
         description:
           type: string
           description: Additional description for fail status
@@ -130,6 +137,9 @@ components:
           type: string
           description: status of API request success|fail
           example: success
+          enum:
+            - success
+            - fail
         description:
           type: string
           description: Additional description for fail status
@@ -146,6 +156,9 @@ components:
           type: string
           description: status of API request success|fail
           example: success
+          enum:
+            - success
+            - fail
         description:
           type: string
           description: Additional description for fail status
@@ -187,6 +200,9 @@ components:
           type: string
           description: status of API request success|fail
           example: success
+          enum:
+            - success
+            - fail
         description:
           type: string
           description: Additional description for fail status
@@ -232,10 +248,17 @@ components:
           type: string
           description: Token type ex. refresh, access
           example: refresh
+          enum:
+            - refresh
+            - access
         format:
           type: string
           description: Token format ex. JWT
           example: JWT
+          enum:
+            - JWT
+            - UUID
+            - UNKNOWN
         token:
           type: string
           description: Token string
